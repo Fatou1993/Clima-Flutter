@@ -1,4 +1,7 @@
+import 'package:clima/screens/location_screen.dart';
+import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -6,17 +9,35 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  void getLocation() async {
+    var weatherData = await WeatherModel().getLocationWeather();
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LocationScreen(
+            weatherData: weatherData,
+          ),
+        ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            //Get the current location
-          },
-          child: Text('Get Location'),
-        ),
+      body: SpinKitDoubleBounce(
+        color: Colors.white,
+        size: 50.0,
       ),
     );
   }
 }
+
+// Lifecycle of stateful widget
+// initState() => get triggered when state initialized
+// deactivate() => when widget destroyed
